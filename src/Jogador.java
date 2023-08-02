@@ -55,4 +55,6 @@ public class Jogador {
     public ArrayList<Peca> getPecas() {
         return pecas;
     }
+
+    public String getNome(){ return nome;}
 }

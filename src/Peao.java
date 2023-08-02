@@ -74,6 +74,10 @@ public class Peao  extends Peca{
         return possiveisMovimentos;
     }
 
+    public void setPrimeiroMov(boolean primeiroMov) {
+        this.primeiroMov = primeiroMov;
+    }
+
     @Override
     public String toString() {
         return "P" + this.getCor().substring(0,1);

@@ -37,23 +37,29 @@ public class Rei extends Peca{
                         indice == posicaoNoTabuleiro + 9 )){
 
                     verificaPeca(posicao, possiveisMovimentos);
-                }
-
-                if(validarExtremidade(posicaoNoTabuleiro) && //verifica extremidade da esquerda
+                } else if(validarExtremidade(posicaoNoTabuleiro) && //verifica extremidade da esquerda
                         !(indice == posicaoNoTabuleiro + 7 ||
                                 indice == posicaoNoTabuleiro - 1 ||
                                 indice == posicaoNoTabuleiro - 9 )){
 
                     verificaPeca(posicao, possiveisMovimentos);
+                } else {
+                    verificaPeca(posicao, possiveisMovimentos);
                 }
+
 
             }
         }
         return possiveisMovimentos;
     }
 
+    public void setPrimeiroMov(boolean primeiroMov) {
+        this.primeiroMov = primeiroMov;
+    }
+
     @Override
     public String toString() {
         return "R" +  this.getCor().substring(0,1);
     }
+    //esta dando prolema nos cantos
 }

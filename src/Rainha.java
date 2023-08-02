@@ -51,6 +51,7 @@ public class Rainha extends Peca{
         }
 
         //movimentos horizontais e verticais
+        //cima
         for(int i = posicaoNoTabuleiro + 8;
             i < posicoesTabuleiro.size();
             i += 8){
@@ -60,7 +61,7 @@ public class Rainha extends Peca{
                 break;
             }
         }
-
+        //baixo
         for(int i = posicaoNoTabuleiro - 8;
             i >= 0;
             i -= 8){
@@ -70,7 +71,7 @@ public class Rainha extends Peca{
                 break;
             }
         }
-
+        //direita
         for(int i = (validarExtremidade(posicaoNoTabuleiro + 1) ? 64 : posicaoNoTabuleiro + 1);
             i < posicoesTabuleiro.size();
             i ++){
@@ -80,8 +81,8 @@ public class Rainha extends Peca{
                 break;
             }
         }
-
-        for(int i = (validarExtremidade(posicaoNoTabuleiro) ? -1 : posicaoNoTabuleiro - 9);
+        //esquerda
+        for(int i = (validarExtremidade(posicaoNoTabuleiro) ? -1 : posicaoNoTabuleiro - 1);
             i >= 0;
             i --){
 

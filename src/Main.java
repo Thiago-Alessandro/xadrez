@@ -18,63 +18,79 @@ public class Main {
         j2.setCor("Preto",tabuleiro);
         Jogador jogadorAtual = j1;
         do {
-            imprimirTabuleiro(tabuleiro);
-
-            //escolha da peca
-            // -- System.out.println(j1.getPecas());
-
             Peca pecaSelecionada = null;
-            boolean podeSeleconar;
+
+            ArrayList<Posicao> posicoes;
+
+            int indicePosicao;
+            Posicao posicaoEscolhida;
             do {
-                podeSeleconar = true;
 
-                System.out.println("\nSelecione o indice da peca que quer movimentar: ");
-                int indiceEscolhaPeca = sc.nextInt() - 1;
-                if(indiceEscolhaPeca > 0 && indiceEscolhaPeca < 65) {
-                    pecaSelecionada = tabuleiro.getPosicoes().get(indiceEscolhaPeca).getPeca();
-                    if (!jogadorAtual.getPecas().contains(pecaSelecionada)) {
-                        podeSeleconar = false;
-                        System.out.println("\nVocê só pode selecionar suas peças");
+                imprimirTabuleiro(tabuleiro);
+
+                //Seleção da peçaa movimentar
+
+                boolean podeSelecionar;
+                do {
+                    podeSelecionar = true;
+
+                    System.out.println("\nSelecione o indice da peca que quer movimentar: ");
+                    int indiceEscolhaPeca = sc.nextInt() - 1;
+                    if (indiceEscolhaPeca > 0 && indiceEscolhaPeca < 65) {
+
+                        pecaSelecionada = tabuleiro.getPosicoes().get(indiceEscolhaPeca).getPeca();
+                        if (!jogadorAtual.getPecas().contains(pecaSelecionada)) {
+                            podeSelecionar = false;
+                            System.out.println("\nVocê só pode selecionar suas peças");
+                        }
+                        System.out.println(pecaSelecionada); // da p tirar isso
+                    } else {
+                        System.out.println("\nInsira um indice de 1 à 64");
+                        podeSelecionar = false;
                     }
-                    System.out.println(pecaSelecionada); // da p tirar isso
-                } else {
-                    System.out.println("\nInsira um indice de 1 à 64");
-                    podeSeleconar = false;
-                }
-            }while(!podeSeleconar);
-            // -- Peca peca = j1.getPecas().get(escolhaPeca);
-            // -- System.out.println(peca);
+                } while (!podeSelecionar);
 
-            //escolha da posicao p movimentar
+                //escolha da posicao p movimentar
 
-                ArrayList<Posicao> posicoes = pecaSelecionada.possiveisMovimentos(tabuleiro);
+                posicoes = pecaSelecionada.possiveisMovimentos(tabuleiro);
                 String posicoesValidas = "\n";
                 int index = 1;
-                for(Posicao posicao : posicoes){
-                    posicoesValidas += index + " - " + posicao + " " +  tabuleiro.getPosicoes().indexOf(posicao)+1 + "\n";//talvez+1
+
+                for (Posicao posicao : posicoes) {
+                    posicoesValidas += index + " - " + posicao + " " + (tabuleiro.getPosicoes().indexOf(posicao) + 1) + "\n";//talvez+1
                     index++;
                 }
-                posicoesValidas += "0 - voltar"; //tem que fazer validar e voltar de fato
+                posicoesValidas += "0 - voltar";
 
-            int escolhaPosicao;
-            Posicao posicao;
-            do{
-                System.out.println("\nPossiveis Movimentos: ");
-                System.out.println(posicoesValidas);
-                escolhaPosicao = sc.nextInt();
-                if(escolhaPosicao<0 || escolhaPosicao > posicoes.size()){
-                    System.out.println("\nEscolha uma posição válida!");
-                }
-                posicao = posicoes.get(escolhaPosicao-1);
-            }while(escolhaPosicao<0 || escolhaPosicao > posicoes.size());
+                do {
+                    System.out.println("\nPossiveis Movimentos: ");
+                    System.out.println(posicoesValidas);
+                    indicePosicao = sc.nextInt();
 
+                    if (indicePosicao < 0 || indicePosicao > posicoes.size()) {
+                        System.out.println("\nEscolha uma posição válida!");
+                    } else if (indicePosicao == 0){
+                        pecaSelecionada = null;
+                    }
+                } while (indicePosicao < 0 || indicePosicao > posicoes.size());
+
+            }while(pecaSelecionada==null);
+
+            posicaoEscolhida = posicoes.get(indicePosicao-1);
 
             //movimentacao da peca escolhida p posicao desejada
-            j1.moverPeca(pecaSelecionada, posicao, tabuleiro, j2);
+            j1.moverPeca(pecaSelecionada, posicaoEscolhida, tabuleiro, j2);
             System.out.println(validarVitoria(j2));
+
         }while(!validarVitoria(j1) && !validarVitoria(j2));
 
+        if(validarVitoria(j2)){
+            System.out.println("Parabéns " + j1.getNome());
+        } else {
+            System.out.println("Parabéns " + j2.getNome());
+        }
     }
+
     private static boolean validarVitoria(Jogador adversario){
         for(Peca peca : adversario.getPecas()){
             if(peca instanceof Rei){

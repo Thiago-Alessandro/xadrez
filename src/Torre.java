@@ -19,6 +19,7 @@ public class Torre extends Peca{
 
         ArrayList<Posicao> posicoesTabuleiro = tabuleiro.getPosicoes();
 
+        //para cima
         for(int i = posicaoNoTabuleiro + 8;
             i < posicoesTabuleiro.size();
             i += 8){
@@ -29,6 +30,7 @@ public class Torre extends Peca{
             }
         }
 
+        //para baixo
         for(int i = posicaoNoTabuleiro - 8;
             i >= 0;
             i -= 8){
@@ -39,6 +41,7 @@ public class Torre extends Peca{
             }
         }
 
+        //direita
         for(int i = (validarExtremidade(posicaoNoTabuleiro + 1) ? 64 : posicaoNoTabuleiro + 1);
             i < posicoesTabuleiro.size();
             i ++){
@@ -49,7 +52,8 @@ public class Torre extends Peca{
             }
         }
 
-        for(int i = (validarExtremidade(posicaoNoTabuleiro) ? -1 : posicaoNoTabuleiro - 9);
+        //esquerda
+        for(int i = (validarExtremidade(posicaoNoTabuleiro) ? -1 : posicaoNoTabuleiro - 1);//tava -9
             i >= 0;
             i --){
 
@@ -59,6 +63,10 @@ public class Torre extends Peca{
             }
         }
         return possiveisMovimentos;
+    }
+
+    public void setPrimeiroMov(boolean primeiroMov) {
+        this.primeiroMov = primeiroMov;
     }
 
     @Override

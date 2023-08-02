@@ -26,7 +26,7 @@ public class Cavalo extends Peca{
                 verificaPeca(posicoesTabuleiro.get(posicaoNoTabuleiro - 17), possiveisMovimentos);
             }
         }
-        if(!validarExtremidade(posicaoNoTabuleiro -1)|| validarExtremidade(posicaoNoTabuleiro)){
+        if(!validarExtremidade(posicaoNoTabuleiro -1) && !validarExtremidade(posicaoNoTabuleiro)){
             //valida coluna ao lado da lateral esquerda (e lateral esquerda)
             if(posicaoNoTabuleiro + 6 < 64) {
                 verificaPeca(posicoesTabuleiro.get(posicaoNoTabuleiro + 6), possiveisMovimentos);
@@ -44,7 +44,7 @@ public class Cavalo extends Peca{
                 verificaPeca(posicoesTabuleiro.get(posicaoNoTabuleiro + 17), possiveisMovimentos);
             }
         }
-        if(validarExtremidade(posicaoNoTabuleiro + 2)|| validarExtremidade(posicaoNoTabuleiro + 1)){
+        if(!validarExtremidade(posicaoNoTabuleiro + 2) && !validarExtremidade(posicaoNoTabuleiro + 1)){
             //valida posicao ao lado lateral direita (e a lateral direita)
 
             if(posicaoNoTabuleiro - 6 > 0) {

@@ -27,6 +27,17 @@ public abstract class Peca {
                 this.posicao.setPeca(null);
                 //trocando a posicao atual da peca
                 this.posicao = posicao;
+
+                //setando primeiro moveimento como falso
+                if(this instanceof Torre){
+                    ((Torre) this).setPrimeiroMov(false);
+                }
+                if(this instanceof Peao){
+                    ((Peao) this).setPrimeiroMov(false);
+                }
+                if(this instanceof Rei){
+                    ((Rei) this).setPrimeiroMov(false);
+                }
                 return true;
             }
         }
