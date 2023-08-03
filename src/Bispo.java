@@ -53,6 +53,6 @@ public class  Bispo extends Peca{
 
     @Override
     public String toString() {
-        return "B" + this.getCor().substring(0,1);
+        return "B" + this.getCor().charAt(0);
     }
 }

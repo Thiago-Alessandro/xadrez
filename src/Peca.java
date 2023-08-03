@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public abstract class Peca {
 
-    private String cor;
+    private final String cor;
     private Posicao posicao;
 
     String simbolo;
@@ -80,10 +80,6 @@ public abstract class Peca {
         return "Peca: " +
                 "cor: " + cor; //+ '\'' +
                // ", posicao=" + posicao +;
-    }
-
-    public String getSimbolo(){
-        return simbolo;
     }
 
 }

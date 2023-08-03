@@ -59,6 +59,6 @@ public class Cavalo extends Peca{
 
     @Override
     public String toString() {
-        return "C" +  this.getCor().substring(0,1);
+        return "C" +  this.getCor().charAt(0);
     }
 }

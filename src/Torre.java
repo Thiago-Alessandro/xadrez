@@ -71,6 +71,6 @@ public class Torre extends Peca{
 
     @Override
     public String toString() {
-        return "T" +  this.getCor().substring(0,1);
+        return "T" +  this.getCor().charAt(0);
     }
 }

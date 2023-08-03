@@ -1,7 +1,7 @@
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
+
 
     public static void main(String[] args) {
 
@@ -12,12 +12,13 @@ public class Main {
 
         Tabuleiro tabuleiro = new Tabuleiro();
 
-        //System.out.println(tabuleiro);
-
         j1.setCor("Branco", tabuleiro);
         j2.setCor("Preto",tabuleiro);
         Jogador jogadorAtual = j1;
+
         do {
+            System.out.println("\n\t\t\t" + jogadorAtual.getNome() + " é a sua vez!\n");
+
             Peca pecaSelecionada = null;
 
             ArrayList<Posicao> posicoes;
@@ -26,7 +27,7 @@ public class Main {
             Posicao posicaoEscolhida;
             do {
 
-                imprimirTabuleiro(tabuleiro);
+                imprimirTabuleiro(tabuleiro, jogadorAtual);
 
                 //Seleção da peçaa movimentar
 
@@ -36,7 +37,7 @@ public class Main {
 
                     System.out.println("\nSelecione o indice da peca que quer movimentar: ");
                     int indiceEscolhaPeca = sc.nextInt() - 1;
-                    if (indiceEscolhaPeca > 0 && indiceEscolhaPeca < 65) {
+                    if (indiceEscolhaPeca >= 0 && indiceEscolhaPeca < 64) {
 
                         pecaSelecionada = tabuleiro.getPosicoes().get(indiceEscolhaPeca).getPeca();
                         if (!jogadorAtual.getPecas().contains(pecaSelecionada)) {
@@ -79,8 +80,19 @@ public class Main {
             posicaoEscolhida = posicoes.get(indicePosicao-1);
 
             //movimentacao da peca escolhida p posicao desejada
-            j1.moverPeca(pecaSelecionada, posicaoEscolhida, tabuleiro, j2);
+            if(jogadorAtual == j1){
+                jogadorAtual.moverPeca(pecaSelecionada, posicaoEscolhida, tabuleiro, j2);
+            } else {
+                jogadorAtual.moverPeca(pecaSelecionada, posicaoEscolhida, tabuleiro, j1);
+            }
+
             System.out.println(validarVitoria(j2));
+
+            if(jogadorAtual == j1){
+                jogadorAtual = j2;
+            } else {
+                jogadorAtual = j1;
+            }
 
         }while(!validarVitoria(j1) && !validarVitoria(j2));
 
@@ -100,21 +112,40 @@ public class Main {
         return true;
     }
 
-    private static void imprimirTabuleiro(Tabuleiro tabuleiro){
+    private static void imprimirTabuleiro(Tabuleiro tabuleiro, Jogador jogadorAtual){
 
         int index = 1;
 
-        for(Posicao posicao: tabuleiro.getPosicoes()){
-            if(posicao.getPeca() != null) {
-                System.out.print(" | " + posicao.getPeca());
-            } else {
-                System.out.print(" | " + "  ");
+        if(jogadorAtual.getCor().equals("Branco")) {
+            for(Posicao posicao: tabuleiro.getPosicoes()){
+                if(posicao.getPeca() != null) {
+                    System.out.print(" | " + posicao.getPeca());
+                } else {
+                    System.out.print(" | " + "  ");
+                }
+                if(index %8==0) {
+                    System.out.print(" | \n");
+                }
+                index++;
             }
-            if(index %8==0) {
-                System.out.print(" | \n");
+        } else {
+            ArrayList<Posicao> tabuleiroInvertido = tabuleiro.getPosicoes();
+            Collections.reverse(tabuleiroInvertido);
+
+            for(Posicao posicao: tabuleiroInvertido){
+                if(posicao.getPeca() != null) {
+                    System.out.print(" | " + posicao.getPeca());
+                } else {
+                    System.out.print(" | " + "  ");
+                }
+                if(index %8==0) {
+                    System.out.print(" | \n");
+                }
+                index++;
             }
-            index++;
+            Collections.reverse(tabuleiroInvertido);
         }
+
     }
 
 }

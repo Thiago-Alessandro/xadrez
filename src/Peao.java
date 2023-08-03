@@ -80,6 +80,6 @@ public class Peao  extends Peca{
 
     @Override
     public String toString() {
-        return "P" + this.getCor().substring(0,1);
+        return "P" + this.getCor().charAt(0);
     }
 }

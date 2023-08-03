@@ -96,6 +96,6 @@ public class Rainha extends Peca{
 
     @Override
     public String toString() {
-        return "D" +  this.getCor().substring(0,1);
+        return "D" +  this.getCor().charAt(0);
     }
 }

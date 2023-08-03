@@ -35,7 +35,7 @@ public class Rei extends Peca{
                 !(indice == posicaoNoTabuleiro -7 ||
                         indice == posicaoNoTabuleiro + 1 ||
                         indice == posicaoNoTabuleiro + 9 )){
-
+                    System.out.println("direita " + posicao);
                     verificaPeca(posicao, possiveisMovimentos);
                 } else if(validarExtremidade(posicaoNoTabuleiro) && //verifica extremidade da esquerda
                         !(indice == posicaoNoTabuleiro + 7 ||
@@ -43,7 +43,8 @@ public class Rei extends Peca{
                                 indice == posicaoNoTabuleiro - 9 )){
 
                     verificaPeca(posicao, possiveisMovimentos);
-                } else {
+                } else if (!validarExtremidade(posicaoNoTabuleiro) &&
+                           !validarExtremidade(posicaoNoTabuleiro + 1)){
                     verificaPeca(posicao, possiveisMovimentos);
                 }
 
@@ -59,7 +60,7 @@ public class Rei extends Peca{
 
     @Override
     public String toString() {
-        return "R" +  this.getCor().substring(0,1);
+        return "R" +  this.getCor().charAt(0);
     }
     //esta dando prolema nos cantos
 }

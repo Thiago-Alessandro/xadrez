@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Tabuleiro {
 
-    private ArrayList<Posicao> posicoes = new ArrayList<>();
+    private final ArrayList<Posicao> posicoes = new ArrayList<>();
 
     public Tabuleiro(){
 
@@ -55,9 +55,9 @@ public class Tabuleiro {
 
     }
 
-    public void removerPeca(Posicao posicao){
-
-    }
+//    public void removerPeca(Posicao posicao){
+//
+//    }
 
     public ArrayList<Posicao> getPosicoes() {
         return posicoes;
