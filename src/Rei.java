@@ -58,6 +58,10 @@ public class Rei extends Peca{
         this.primeiroMov = primeiroMov;
     }
 
+    public boolean getPrimeiroMov(){
+        return primeiroMov;
+    }
+
     @Override
     public String toString() {
         return "R" +  this.getCor().charAt(0);

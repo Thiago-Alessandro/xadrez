@@ -67,6 +67,11 @@ public class Main {
                     index++;
                 }
 
+//                if(verificaRoqueCurto(tabuleiro, pecaSelecionada, jogadorAtual)){
+//                    posicoesValidas += index + " - " +
+//                }
+                //colocar dentro da verificacao do rei e terminar verificacao (talvez retornar posicao na funcao)
+
                 posicoesValidas += "0 - voltar";
 
                 do {
@@ -123,9 +128,9 @@ public class Main {
             }
 
             //verifica se uma determinada posicao esta sendo atacada
-            if(verificaPosicaoSendoAtacada(tabuleiro, jogadorAtual.getRei().getPosicao(), jogadorAtual)){
-                System.out.println("Seu rei esta sendo atacado");
-            }
+//            if(verificaPosicaoSendoAtacada(tabuleiro, jogadorAtual.getRei().getPosicao(), jogadorAtual)){
+//                System.out.println("Seu rei esta sendo atacado");
+//            }
 
 
             System.out.println(validarVitoria(j2));
@@ -191,16 +196,48 @@ public class Main {
     }
 
     private static boolean verificaPosicaoSendoAtacada(Tabuleiro tabuleiro, Posicao posicaoAVerificar, Jogador jogadorAtual){
+        boolean testandoPeca = false;
+        if(posicaoAVerificar.getPeca() == null){
+            posicaoAVerificar.setPeca(new Peao(jogadorAtual.getCor(), posicaoAVerificar));
+            testandoPeca = true;
+        }
+
         for(Posicao posicaoTabuleiro : tabuleiro.getPosicoes()){                                                //passa por todas posicoes
             Peca pecaInimiga = posicaoTabuleiro.getPeca();
-            if(pecaInimiga!=null){
-                if(!pecaInimiga.getCor().equals(jogadorAtual.getCor())) {                           //se a peca for inimiga
-                    for (Posicao posicaoAtacando : pecaInimiga.possiveisMovimentos(tabuleiro)){                 //verifica os movimentos da peca inimiga
-                        if(posicaoAtacando == posicaoAVerificar){                                               //se a posicao escolhida for um movimento possivel da inimiga
-                            return true;                                                                        //retorna que a posição esta sendo atacada
+
+
+            if(pecaInimiga!=null && !(pecaInimiga.getCor().equals(jogadorAtual.getCor()) )) {
+
+                for (Posicao posicaoAtacando : pecaInimiga.possiveisMovimentos(tabuleiro)){                //verifica os movimentos da peca inimiga
+
+                    if(posicaoAtacando == posicaoAVerificar){                                               //se a posicao escolhida for um movimento possivel da inimiga
+
+                        if (testandoPeca){
+                            posicaoAVerificar.setPeca(null);
                         }
+                        return true;                                                                        //retorna que a posição esta sendo atacada
                     }
                 }
+            }
+        }
+        if (testandoPeca){
+            posicaoAVerificar.setPeca(null);
+        }
+        return false;
+    }
+
+    public static boolean verificaRoqueCurto(Tabuleiro tabuleiro, Peca peca, Jogador jogadorAtual){
+
+        int indicePosicao = tabuleiro.getPosicoes().indexOf(peca.getPosicao() );
+        if(((Rei) peca).getPrimeiroMov()){
+
+            if( tabuleiro.getPosicoes().get( indicePosicao + 1 ).getPeca() != null &&
+                    tabuleiro.getPosicoes().get( indicePosicao + 2 ).getPeca() != null &&
+                    tabuleiro.getPosicoes().get( indicePosicao + 3 ).getPeca() != null &&
+                    !verificaPosicaoSendoAtacada( tabuleiro, tabuleiro.getPosicoes().get( indicePosicao + 1 ), jogadorAtual) &&
+                    !verificaPosicaoSendoAtacada( tabuleiro, tabuleiro.getPosicoes().get( indicePosicao + 2 ), jogadorAtual) &&
+                    ((Torre) tabuleiro.getPosicoes().get(indicePosicao + 3).getPeca()).getPrimeiroMov() ){
+                return true; //falta o longo (outra funcao)
             }
         }
         return false;

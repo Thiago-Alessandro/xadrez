@@ -82,22 +82,36 @@ public abstract class Peca {
                // ", posicao=" + posicao +;
     }
 
-    //estava no main, talvez n é a melhor pratica colocar aqui (usado no rei)
-//    public boolean verificaPosicaoSendoAtacada(Tabuleiro tabuleiro, Posicao posicaoAVerificar){
-//        for(Posicao posicaoTabuleiro : tabuleiro.getPosicoes()){                                                //passa por todas posicoes
-//            Peca pecaInimiga = posicaoTabuleiro.getPeca();
-//            if(pecaInimiga!=null && !(pecaInimiga instanceof Rei)){
-//                if(posicaoAVerificar.getPeca() == null ||
-//                !pecaInimiga.getCor().equals(posicaoAVerificar.getPeca().getCor())) {                           //se a peca for inimiga
-//                    for (Posicao posicaoAtacando : pecaInimiga.possiveisMovimentos(tabuleiro)){                 //verifica os movimentos da peca inimiga
-//                        if(posicaoAtacando == posicaoAVerificar){                                               //se a posicao escolhida for um movimento possivel da inimiga
-//                            return true;                                                                        //retorna que a posição esta sendo atacada
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return false;
-//    }
+
+    public boolean verificaPosicaoSendoAtacada(Tabuleiro tabuleiro, Posicao posicaoAVerificar, Jogador jogadorAtual){
+        boolean testandoPeca = false;
+        if(posicaoAVerificar.getPeca() == null){
+            posicaoAVerificar.setPeca(new Peao(jogadorAtual.getCor(), posicaoAVerificar));
+            testandoPeca = true;
+        }
+
+        for(Posicao posicaoTabuleiro : tabuleiro.getPosicoes()){                                                //passa por todas posicoes
+            Peca pecaInimiga = posicaoTabuleiro.getPeca();
+
+
+            if(pecaInimiga!=null && !(pecaInimiga.getCor().equals(jogadorAtual.getCor()) )) {
+
+                for (Posicao posicaoAtacando : pecaInimiga.possiveisMovimentos(tabuleiro)){                //verifica os movimentos da peca inimiga
+
+                    if(posicaoAtacando == posicaoAVerificar){                                               //se a posicao escolhida for um movimento possivel da inimiga
+
+                        if (testandoPeca){
+                            posicaoAVerificar.setPeca(null);
+                        }
+                        return true;                                                                        //retorna que a posição esta sendo atacada
+                    }
+                }
+            }
+        }
+        if (testandoPeca){
+            posicaoAVerificar.setPeca(null);
+        }
+        return false;
+    }
 
 }

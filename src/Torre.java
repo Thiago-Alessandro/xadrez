@@ -73,6 +73,10 @@ public class Torre extends Peca{
         this.primeiroMov = primeiroMov;
     }
 
+    public boolean getPrimeiroMov(){
+        return primeiroMov;
+    }
+
     @Override
     public String toString() {
         return "T" +  this.getCor().charAt(0);
