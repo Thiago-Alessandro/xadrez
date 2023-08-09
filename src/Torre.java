@@ -25,7 +25,9 @@ public class Torre extends Peca{
             i += 8){
 
             if (verificaPeca(posicoesTabuleiro.get(i),
-                    possiveisMovimentos)||validarExtremidade(i)) {
+                    possiveisMovimentos)
+//                    ||validarExtremidade(i)
+            ) {
                 break;
             }
         }
@@ -36,7 +38,9 @@ public class Torre extends Peca{
             i -= 8){
 
             if(verificaPeca(posicoesTabuleiro.get(i),
-                    possiveisMovimentos) || validarExtremidade(i + 1) ){
+                    possiveisMovimentos)
+//                    || validarExtremidade(i + 1)
+            ){
                 break;
             }
         }

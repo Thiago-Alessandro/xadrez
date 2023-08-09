@@ -56,11 +56,17 @@ public class Main {
                 posicoes = pecaSelecionada.possiveisMovimentos(tabuleiro);
                 String posicoesValidas = "\n";
                 int index = 1;
+                if(pecaSelecionada instanceof Rei){
+                    Jogador finalJogadorAtual = jogadorAtual;
+                    posicoes.removeIf(posicao -> verificaPosicaoSendoAtacada(tabuleiro, posicao, finalJogadorAtual));
+                }
+                //aqui aaajhh nao ta certo ainda (rei entre dois peoes afastado 1 posicao)
 
                 for (Posicao posicao : posicoes) {
                     posicoesValidas += index + " - " + posicao + " " + (tabuleiro.getPosicoes().indexOf(posicao) + 1) + "\n";//talvez+1
                     index++;
                 }
+
                 posicoesValidas += "0 - voltar";
 
                 do {
@@ -85,6 +91,42 @@ public class Main {
             } else {
                 jogadorAtual.moverPeca(pecaSelecionada, posicaoEscolhida, tabuleiro, j1);
             }
+
+            //promove o peao
+            if(pecaSelecionada instanceof Peao) {
+                if (tabuleiro.getPosicoes().indexOf(posicaoEscolhida) > 52 && tabuleiro.getPosicoes().indexOf(posicaoEscolhida) < 64 ||
+                    tabuleiro.getPosicoes().indexOf(posicaoEscolhida) >= 0 && tabuleiro.getPosicoes().indexOf(posicaoEscolhida) < 8) {
+                    Peca novaPeca = null;
+                    do {
+                        System.out.println("""
+                                Deseja promover seu peão para:
+                                1 - Rainha
+                                2 - Cavalo
+                                3 - Torre
+                                4 - Bispo
+                                """);
+                        int opcao = sc.nextInt();
+                        switch (opcao) {
+                            case 1 -> novaPeca = new Rainha(pecaSelecionada.getCor(), posicaoEscolhida);
+                            case 2 -> novaPeca = new Cavalo(pecaSelecionada.getCor(), posicaoEscolhida);
+                            case 3 -> novaPeca = new Torre(pecaSelecionada.getCor(), posicaoEscolhida);
+                            case 4 -> novaPeca = new Bispo(pecaSelecionada.getCor(), posicaoEscolhida);
+                            default -> System.out.println("Escolha uma opção válida");
+                        }
+                    } while (novaPeca==null);
+                    posicaoEscolhida.setPeca(novaPeca);
+                    ArrayList<Peca> novasPecas = jogadorAtual.getPecas();
+                    novasPecas.remove(pecaSelecionada);
+                    novasPecas.add(novaPeca);
+                    jogadorAtual.setPecas(novasPecas);
+                }
+            }
+
+            //verifica se uma determinada posicao esta sendo atacada
+            if(verificaPosicaoSendoAtacada(tabuleiro, jogadorAtual.getRei().getPosicao(), jogadorAtual)){
+                System.out.println("Seu rei esta sendo atacado");
+            }
+
 
             System.out.println(validarVitoria(j2));
 
@@ -146,6 +188,22 @@ public class Main {
             Collections.reverse(tabuleiroInvertido);
         }
 
+    }
+
+    private static boolean verificaPosicaoSendoAtacada(Tabuleiro tabuleiro, Posicao posicaoAVerificar, Jogador jogadorAtual){
+        for(Posicao posicaoTabuleiro : tabuleiro.getPosicoes()){                                                //passa por todas posicoes
+            Peca pecaInimiga = posicaoTabuleiro.getPeca();
+            if(pecaInimiga!=null){
+                if(!pecaInimiga.getCor().equals(jogadorAtual.getCor())) {                           //se a peca for inimiga
+                    for (Posicao posicaoAtacando : pecaInimiga.possiveisMovimentos(tabuleiro)){                 //verifica os movimentos da peca inimiga
+                        if(posicaoAtacando == posicaoAVerificar){                                               //se a posicao escolhida for um movimento possivel da inimiga
+                            return true;                                                                        //retorna que a posição esta sendo atacada
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

@@ -52,9 +52,22 @@ public class Jogador {
         return cor;
     }
 
+    public void setPecas(ArrayList<Peca> pecas) {
+        this.pecas = pecas;
+    }
+
     public ArrayList<Peca> getPecas() {
         return pecas;
     }
 
     public String getNome(){ return nome;}
+
+    public Peca getRei(){
+        for (Peca peca : pecas){
+            if(peca instanceof Rei){
+                return peca;
+            }
+        }
+        return null;
+    }
 }

@@ -11,7 +11,6 @@ public class Peao  extends Peca{
     @Override
     public ArrayList<Posicao> possiveisMovimentos(Tabuleiro tabuleiro) {
 
-
         ArrayList<Posicao> possiveisMovimentos = new ArrayList<>();
 
         Posicao posicaoAtual = this.getPosicao();
@@ -60,14 +59,14 @@ public class Peao  extends Peca{
                     && posicoesTabuleiro.get(posicaoNoTabuleiro - 9).getPeca().getCor().equals("Preto")
                     && !validarExtremidade(posicaoNoTabuleiro)){
 
-                possiveisMovimentos.add(posicoesTabuleiro.get(posicaoNoTabuleiro+9));
+                possiveisMovimentos.add(posicoesTabuleiro.get(posicaoNoTabuleiro-9)); //tava +9 e em baixo +7
 
             }
             if(posicoesTabuleiro.get(posicaoNoTabuleiro - 7).getPeca()!=null &&
                     posicoesTabuleiro.get(posicaoNoTabuleiro - 7).getPeca().getCor().equals("Preto")
                     && !validarExtremidade(posicaoNoTabuleiro + 1)){
 
-                possiveisMovimentos.add(posicoesTabuleiro.get(posicaoNoTabuleiro+7));
+                possiveisMovimentos.add(posicoesTabuleiro.get(posicaoNoTabuleiro-7));
 
             }
         }
