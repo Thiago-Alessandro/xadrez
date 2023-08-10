@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Torre extends Peca{
 
-    private boolean primeiroMov;
+    private boolean primeiroMov = true;
 
     public Torre(String cor, Posicao posicao){
         super("T", cor, posicao);

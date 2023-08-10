@@ -16,31 +16,45 @@ public abstract class Peca {
     public boolean mover(Tabuleiro tabuleiro, Posicao posicao){
         //recebe por parametro a posicao para onde vai
 
-        ArrayList<Posicao> possiveisPosicoes = possiveisMovimentos(tabuleiro);
-
-        for(Posicao posicaoPossivel : possiveisPosicoes){
-
-            if(posicaoPossivel == posicao) {
-                //atribuindo a peca para a nova posicao (no tableiro)
-                posicao.setPeca(this);
-                //removendo a peca da posicao antesrior
-                this.posicao.setPeca(null);
-                //trocando a posicao atual da peca
-                this.posicao = posicao;
-
-                //setando primeiro moveimento como falso
-                if(this instanceof Torre){
-                    ((Torre) this).setPrimeiroMov(false);
-                }
-                if(this instanceof Peao){
-                    ((Peao) this).setPrimeiroMov(false);
-                }
-                if(this instanceof Rei){
-                    ((Rei) this).setPrimeiroMov(false);
-                }
-                return true;
+        int indicePosicaoNoTabuleiro = tabuleiro.getPosicoes().indexOf(this.posicao);
+        if(this instanceof Rei && ((Rei) this).getPrimeiroMov())  {
+            //se a opcao for um rei
+            int numRoque = 0;
+            if(tabuleiro.getPosicoes().get(indicePosicaoNoTabuleiro + 2) == posicao ){
+                numRoque = 1; //roque curto
+            } else if (tabuleiro.getPosicoes().get(indicePosicaoNoTabuleiro - 2) == posicao ){
+                numRoque = 2; //roque longo
+            }
+            if(numRoque == 1 || numRoque == 2){
+                ((Rei) this).fazerRoque(tabuleiro, posicao, numRoque);
+                return true;    //se fizer o roque retorna a funcao
             }
         }
+            ArrayList<Posicao> possiveisPosicoes = possiveisMovimentos(tabuleiro);
+
+            for (Posicao posicaoPossivel : possiveisPosicoes) {
+
+                if (posicaoPossivel == posicao) {
+                    //atribuindo a peca para a nova posicao (no tableiro)
+                    posicao.setPeca(this);
+                    //removendo a peca da posicao antesrior
+                    this.posicao.setPeca(null);
+                    //trocando a posicao atual da peca
+                    this.posicao = posicao;
+
+                    //setando primeiro moveimento como falso
+                    if (this instanceof Torre) {
+                        ((Torre) this).setPrimeiroMov(false);
+                    }
+                    if (this instanceof Peao) {
+                        ((Peao) this).setPrimeiroMov(false);
+                    }
+                    if (this instanceof Rei) {
+                        ((Rei) this).setPrimeiroMov(false);
+                    }
+                    return true;
+                }
+            }
         return false;
     }
 
@@ -56,6 +70,10 @@ public abstract class Peca {
             possiveisMovimentos.add(posicao);
         }
         return true;
+    }
+
+    public void setPosicao(Posicao posicao) {
+        this.posicao = posicao;
     }
 
     public boolean validarExtremidade(int posicaoNoTabuleiro){//verifica se ele esta no canto (ou perto depende doq passa por parametro)

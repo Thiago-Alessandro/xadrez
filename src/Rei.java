@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Rei extends Peca{
 
-    private boolean primeiroMov;
+    private boolean primeiroMov = true;
 
     public Rei(String cor, Posicao posicao){
         super("R", cor, posicao);
@@ -52,6 +52,39 @@ public class Rei extends Peca{
             }
         }
         return possiveisMovimentos;
+    }
+
+    public void fazerRoque(Tabuleiro tabuleiro, Posicao posicao, int numRoque){
+
+        // move o rei para a posição desejada (2 casas ao lado)
+        posicao.setPeca(this);
+        this.getPosicao().setPeca(null);
+        this.setPosicao(posicao);
+        System.out.println(tabuleiro.getPosicoes().indexOf(this.getPosicao()));
+        System.out.println(this.getPosicao());
+
+        int indicePosicaoNoTabuleiro = tabuleiro.getPosicoes().indexOf(this.getPosicao());
+
+        Posicao velhaPosTorre;
+        Posicao novaPosTorre;
+
+        if (numRoque == 1) {
+
+            //se poder mover 2 casas (roque curto)
+            velhaPosTorre = tabuleiro.getPosicoes().get(indicePosicaoNoTabuleiro + 1); //posição no canto (agora o rei esta do lado)
+            novaPosTorre = tabuleiro.getPosicoes().get(indicePosicaoNoTabuleiro - 1);  //posição do lado contrario do rei
+
+        } else{ //if(numRoque == 2)
+
+            //fazer roque longo
+
+            velhaPosTorre = tabuleiro.getPosicoes().get(indicePosicaoNoTabuleiro - 2); //posição no canto (agora o rei esta do lado)
+            novaPosTorre = tabuleiro.getPosicoes().get(indicePosicaoNoTabuleiro + 1);  //posição do lado contrario do rei
+        }
+        //move a torre para o outro lado do rei
+        novaPosTorre.setPeca(velhaPosTorre.getPeca());
+        velhaPosTorre.setPeca(null);
+        novaPosTorre.getPeca().setPosicao(novaPosTorre);
     }
 
     public void setPrimeiroMov(boolean primeiroMov) {
