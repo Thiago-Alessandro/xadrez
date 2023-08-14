@@ -1,3 +1,4 @@
+import javax.naming.spi.StateFactory;
 import java.util.*;
 
 public class Main {
@@ -62,6 +63,9 @@ public class Main {
                     if(verificaRoqueCurto(tabuleiro, pecaSelecionada, jogadorAtual)){
                         posicoes.add( tabuleiro.getPosicoes().get( tabuleiro.getPosicoes().indexOf( pecaSelecionada.getPosicao() ) + 2) );
                         System.out.println("adicionei o roque a posicoes");
+                    }
+                    if(verificaRoqueLongo(tabuleiro, pecaSelecionada, jogadorAtual)){
+                        posicoes.add( tabuleiro.getPosicoes().get( tabuleiro.getPosicoes().indexOf( pecaSelecionada.getPosicao() ) - 2) );
                     }
                 }
                 //aqui aaajhh nao ta certo ainda (rei entre dois peoes afastado 1 posicao) // acho q agora ta dboa
@@ -231,13 +235,16 @@ public class Main {
     public static boolean verificaRoqueCurto(Tabuleiro tabuleiro, Peca peca, Jogador jogadorAtual){
 
         int indicePosicao = tabuleiro.getPosicoes().indexOf(peca.getPosicao() );
+        ArrayList<Posicao> posicoes = tabuleiro.getPosicoes();
         if(((Rei) peca).getPrimeiroMov()) {
-            if (tabuleiro.getPosicoes().get(indicePosicao + 1).getPeca() == null) {
-                if (tabuleiro.getPosicoes().get(indicePosicao + 2).getPeca() == null) {
-                    if (tabuleiro.getPosicoes().get(indicePosicao + 3).getPeca() != null) { //pos da torre
-                        if (!verificaPosicaoSendoAtacada(tabuleiro, tabuleiro.getPosicoes().get(indicePosicao + 1), jogadorAtual) &&
-                                !verificaPosicaoSendoAtacada(tabuleiro, tabuleiro.getPosicoes().get(indicePosicao + 2), jogadorAtual) &&     //verificar se realmente é uma torre
-                                ((Torre) tabuleiro.getPosicoes().get(indicePosicao + 3).getPeca()).getPrimeiroMov()) {
+            if (posicoes.get(indicePosicao + 1).getPeca() == null) {
+                if (posicoes.get(indicePosicao + 2).getPeca() == null) {
+                    if (posicoes.get(indicePosicao + 3).getPeca() != null) { //pos da torre
+                        if (!verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao), jogadorAtual) &&
+                                !verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao + 1), jogadorAtual) &&
+                                !verificaPosicaoSendoAtacada(tabuleiro, tabuleiro.getPosicoes().get(indicePosicao + 2), jogadorAtual) &&
+                                posicoes.get(indicePosicao + 3).getPeca() instanceof Torre &&
+                                ((Torre) posicoes.get(indicePosicao + 3).getPeca()).getPrimeiroMov()) {
                             return true; //falta o longo (outra funcao)
                         }
                     }
@@ -245,6 +252,48 @@ public class Main {
             }
         }
         return false;
+    }
+
+    public static boolean verificaRoqueLongo(Tabuleiro tabuleiro, Peca peca, Jogador jogadorAtual){
+
+        int indicePosicao = tabuleiro.getPosicoes().indexOf(peca.getPosicao() );
+        ArrayList<Posicao> posicoes = tabuleiro.getPosicoes();
+        if(((Rei) peca).getPrimeiroMov()) {
+            if (posicoes.get(indicePosicao - 1).getPeca() == null) {
+                if (posicoes.get(indicePosicao - 2).getPeca() == null) {
+                    if (posicoes.get(indicePosicao - 3).getPeca() == null) {
+                        if (posicoes.get(indicePosicao - 4).getPeca() != null) { //pos da torre
+                            if (!verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao), jogadorAtual) &&
+                                    !verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao - 1), jogadorAtual) &&
+                                    !verificaPosicaoSendoAtacada(tabuleiro, tabuleiro.getPosicoes().get(indicePosicao - 2), jogadorAtual) &&
+                                    !verificaPosicaoSendoAtacada(tabuleiro, tabuleiro.getPosicoes().get(indicePosicao - 3), jogadorAtual) &&
+                                    posicoes.get(indicePosicao - 4).getPeca() instanceof Torre &&
+                                    ((Torre) posicoes.get(indicePosicao - 4).getPeca()).getPrimeiroMov()) {
+                                return true; //falta o longo (outra funcao)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean validaJogadas(Tabuleiro tabuleiro, Jogador jogadorAtual, Jogador jogadorAdversario){ //retornar as possicoes talvez? (como faco para separar de cada peca) [cpa faco um especifico para peca passada por parametro e verifico dps num geral todas as pecas]
+        Tabuleiro tabuleiroVelho = tabuleiro;
+        if(jogadorAtual.getRei().possiveisMovimentos(tabuleiro) == null){
+            for(Posicao posicaotabuleiro : tabuleiro.getPosicoes()){
+                if(posicaotabuleiro.getPeca() != null &&
+                   posicaotabuleiro.getPeca().getCor().equals( jogadorAtual.getCor() ) ) {
+                    Peca peca = posicaotabuleiro.getPeca();
+                    for (Posicao posicao : peca.possiveisMovimentos(tabuleiro)) { //passa pelos movimentos das minhas pecas p verificar se quando eu mover, o rei nao vai mais estar em cheque
+
+                        jogadorAtual.moverPeca(peca,posicao,tabuleiro,jogadorAdversario);//?
+                    }
+                }
+            }
+        }
+        return
     }
 
 }
