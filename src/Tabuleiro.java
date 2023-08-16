@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Tabuleiro {
 
-    private final ArrayList<Posicao> posicoes = new ArrayList<>();
+    private ArrayList<Posicao> posicoes = new ArrayList<>();
 
     public Tabuleiro(){
 
@@ -62,6 +62,8 @@ public class Tabuleiro {
     public ArrayList<Posicao> getPosicoes() {
         return posicoes;
     }
+
+    public void setPosicoes(ArrayList<Posicao> posicoes){this.posicoes = posicoes;}
 
     @Override
     public String toString() {

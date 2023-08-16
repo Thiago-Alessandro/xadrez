@@ -1,4 +1,3 @@
-import javax.naming.spi.StateFactory;
 import java.util.*;
 
 public class Main {
@@ -68,9 +67,28 @@ public class Main {
                         posicoes.add( tabuleiro.getPosicoes().get( tabuleiro.getPosicoes().indexOf( pecaSelecionada.getPosicao() ) - 2) );
                     }
                 }
-                //aqui aaajhh nao ta certo ainda (rei entre dois peoes afastado 1 posicao) // acho q agora ta dboa
 
+                posicoes.removeAll(getMovimentosInvalidos(pecaSelecionada, tabuleiro, jogadorAtual));
+//                else {
+//
+//                    //isso aqi n ta mt certo
+//                    ArrayList<Posicao> posicoesARemover = new ArrayList<>();
+//                    for (Posicao posicao : posicoes) {
+//                        if (jogadorAtual == j1 && !validaJogada(tabuleiro, jogadorAtual, pecaSelecionada, posicao, j2)) {
+//                            posicoesARemover.add(posicao);
+//                        } else if (jogadorAtual == j2 && !validaJogada(tabuleiro, jogadorAtual, pecaSelecionada, posicao, j1)) {
+//                            posicoesARemover.add(posicao);
+//                        }
+//                    }
+//                    posicoes.removeAll(posicoesARemover);
+//                }
+
+                System.out.println(pecaSelecionada);
+                System.out.println(pecaSelecionada.getPosicao());
                 for (Posicao posicao : posicoes) {
+                    System.out.println("posicao");
+                    System.out.println(posicao);
+                    System.out.println(posicao.getPeca());
                     posicoesValidas += index + " - " + posicao + " " + (tabuleiro.getPosicoes().indexOf(posicao) + 1) + "\n";//talvez+1
                     index++;
                 }
@@ -209,7 +227,7 @@ public class Main {
         }
 
         for(Posicao posicaoTabuleiro : tabuleiro.getPosicoes()){                                                //passa por todas posicoes
-            Peca pecaInimiga = posicaoTabuleiro.getPeca();
+            Peca pecaInimiga = posicaoTabuleiro.getPeca();//?????
 
 
             if(pecaInimiga!=null && !(pecaInimiga.getCor().equals(jogadorAtual.getCor()) )) {
@@ -240,13 +258,11 @@ public class Main {
             if (posicoes.get(indicePosicao + 1).getPeca() == null) {
                 if (posicoes.get(indicePosicao + 2).getPeca() == null) {
                     if (posicoes.get(indicePosicao + 3).getPeca() != null) { //pos da torre
-                        if (!verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao), jogadorAtual) &&
+                        return !verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao), jogadorAtual) &&
                                 !verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao + 1), jogadorAtual) &&
                                 !verificaPosicaoSendoAtacada(tabuleiro, tabuleiro.getPosicoes().get(indicePosicao + 2), jogadorAtual) &&
                                 posicoes.get(indicePosicao + 3).getPeca() instanceof Torre &&
-                                ((Torre) posicoes.get(indicePosicao + 3).getPeca()).getPrimeiroMov()) {
-                            return true; //falta o longo (outra funcao)
-                        }
+                                ((Torre) posicoes.get(indicePosicao + 3).getPeca()).getPrimeiroMov(); //falta o longo (outra funcao)
                     }
                 }
             }
@@ -263,14 +279,12 @@ public class Main {
                 if (posicoes.get(indicePosicao - 2).getPeca() == null) {
                     if (posicoes.get(indicePosicao - 3).getPeca() == null) {
                         if (posicoes.get(indicePosicao - 4).getPeca() != null) { //pos da torre
-                            if (!verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao), jogadorAtual) &&
+                            return !verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao), jogadorAtual) &&
                                     !verificaPosicaoSendoAtacada(tabuleiro, posicoes.get(indicePosicao - 1), jogadorAtual) &&
                                     !verificaPosicaoSendoAtacada(tabuleiro, tabuleiro.getPosicoes().get(indicePosicao - 2), jogadorAtual) &&
                                     !verificaPosicaoSendoAtacada(tabuleiro, tabuleiro.getPosicoes().get(indicePosicao - 3), jogadorAtual) &&
                                     posicoes.get(indicePosicao - 4).getPeca() instanceof Torre &&
-                                    ((Torre) posicoes.get(indicePosicao - 4).getPeca()).getPrimeiroMov()) {
-                                return true; //falta o longo (outra funcao)
-                            }
+                                    ((Torre) posicoes.get(indicePosicao - 4).getPeca()).getPrimeiroMov(); //falta o longo (outra funcao)
                         }
                     }
                 }
@@ -279,21 +293,72 @@ public class Main {
         return false;
     }
 
-    public static boolean validaJogadas(Tabuleiro tabuleiro, Jogador jogadorAtual, Jogador jogadorAdversario){ //retornar as possicoes talvez? (como faco para separar de cada peca) [cpa faco um especifico para peca passada por parametro e verifico dps num geral todas as pecas]
-        Tabuleiro tabuleiroVelho = tabuleiro;
-        if(jogadorAtual.getRei().possiveisMovimentos(tabuleiro) == null){
-            for(Posicao posicaotabuleiro : tabuleiro.getPosicoes()){
-                if(posicaotabuleiro.getPeca() != null &&
-                   posicaotabuleiro.getPeca().getCor().equals( jogadorAtual.getCor() ) ) {
-                    Peca peca = posicaotabuleiro.getPeca();
-                    for (Posicao posicao : peca.possiveisMovimentos(tabuleiro)) { //passa pelos movimentos das minhas pecas p verificar se quando eu mover, o rei nao vai mais estar em cheque
+    public static ArrayList<Posicao> getMovimentosInvalidos(Peca peca, Tabuleiro tabuleiro, Jogador jogadorAtual){
+        ArrayList<Posicao> movimentos = peca.possiveisMovimentos(tabuleiro);
+        int posicaoOriginal = tabuleiro.getPosicoes().indexOf(peca.getPosicao());
+        Peca pecaGuardada = null;
 
-                        jogadorAtual.moverPeca(peca,posicao,tabuleiro,jogadorAdversario);//?
-                    }
-                }
+        ArrayList<Posicao> possicoesARemover = new ArrayList<>();
+        for(Posicao posicao : movimentos){
+            pecaGuardada = posicao.getPeca();
+            peca.mover(tabuleiro, posicao);
+            if(verificaPosicaoSendoAtacada(tabuleiro, jogadorAtual.getRei().getPosicao(), jogadorAtual)){
+                possicoesARemover.add(posicao);
             }
+            peca.mover(tabuleiro, tabuleiro.getPosicoes().get(posicaoOriginal));
+
+            posicao.setPeca(pecaGuardada);
         }
-        return
+        return possicoesARemover;
     }
+
+//    public static boolean validaJogadas(Tabuleiro tabuleiro, Jogador jogadorAtual, Jogador jogadorAdversario){ //retornar as possicoes talvez? (como faco para separar de cada peca) [cpa faco um especifico para peca passada por parametro e verifico dps num geral todas as pecas]
+//        Tabuleiro tabuleiroVelho = tabuleiro;
+//        if(jogadorAtual.getRei().possiveisMovimentos(tabuleiro) == null){
+//            for(Posicao posicaotabuleiro : tabuleiro.getPosicoes()){
+//                if(posicaotabuleiro.getPeca() != null &&
+//                   posicaotabuleiro.getPeca().getCor().equals( jogadorAtual.getCor() ) ) {
+//                    Peca peca = posicaotabuleiro.getPeca();
+//                    for (Posicao posicao : peca.possiveisMovimentos(tabuleiro)) { //passa pelos movimentos das minhas pecas p verificar se quando eu mover, o rei nao vai mais estar em cheque
+//
+//                        jogadorAtual.moverPeca(peca,posicao,tabuleiro,jogadorAdversario);//?
+//                    }
+//                }
+//            }
+//        }
+//        return false;
+//    }
+//    public static boolean validaJogada(Tabuleiro tabuleiro, Jogador jogadorAtual, Peca peca, Posicao posicao, Jogador jogadorAdversario){
+//        Tabuleiro tabuleiroTeste = new Tabuleiro();
+//        tabuleiroTeste.setPosicoes(tabuleiro.getPosicoes());
+//
+//        Jogador jogadorTeste = new Jogador(jogadorAtual.getNome(), "teste");
+//        jogadorTeste.setCor(jogadorAtual.getCor(), tabuleiro);
+////        jogadorTeste.setPecas(jogadorAtual.getPecas());
+//
+//        Jogador adversarioTeste = new Jogador(jogadorAdversario.getNome(), "teste");
+//        adversarioTeste.setCor(adversarioTeste.getCor(), tabuleiro);
+//
+//        Peca pecaTeste = new Peao(peca.getCor(), peca.getPosicao());
+//
+//        Posicao posicaoTeste = new Posicao();
+//        posicaoTeste.setPeca(posicao.getPeca());
+//
+//        if (peca instanceof Torre){
+//            pecaTeste = new Torre(peca.getCor(), peca.getPosicao());
+//        } else if (peca instanceof Bispo){
+//            pecaTeste = new Bispo(peca.getCor(), peca.getPosicao());
+//        } else if (peca instanceof Cavalo){
+//            pecaTeste = new Cavalo(peca.getCor(), peca.getPosicao());
+//        } else if (peca instanceof Rainha){
+//            pecaTeste = new Rainha(peca.getCor(), peca.getPosicao());
+//        }
+//
+//        if(verificaPosicaoSendoAtacada(tabuleiroTeste, jogadorTeste.getRei().getPosicao(), jogadorTeste)){
+//            jogadorTeste.moverPeca(pecaTeste, posicaoTeste, tabuleiroTeste, adversarioTeste);
+//            return !verificaPosicaoSendoAtacada(tabuleiroTeste, jogadorTeste.getRei().getPosicao(), jogadorTeste);
+//        }
+//        return true;
+//    }
 
 }
