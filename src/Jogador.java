@@ -15,16 +15,15 @@ public class Jogador {
 
     }
 
-    public boolean moverPeca(Peca peca, Posicao posicao, Tabuleiro tabuleiro, Jogador adversario){
+    public void moverPeca(Peca peca, Posicao posicao, Tabuleiro tabuleiro, Jogador adversario){
 
         Peca pecaAdversaria = posicao.getPeca();
 
-        boolean valida = peca.mover(tabuleiro,posicao);
+        peca.mover(tabuleiro,posicao);
 
-        if(pecaAdversaria != null && valida){
+        if(pecaAdversaria != null){
             adversario.pecas.remove(pecaAdversaria);
         }
-        return valida;
     }
 
 

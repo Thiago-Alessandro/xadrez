@@ -17,6 +17,8 @@ public class Main {
         Jogador jogadorAtual = j1;
 
         do {
+            j1.setCor("Branco", tabuleiro);//atualiza as pecas dos jogadores a cada turno;
+            j2.setCor("Preto",tabuleiro);
             System.out.println("\n\t\t\t" + jogadorAtual.getNome() + " é a sua vez!\n");
 
             Peca pecaSelecionada = null;
@@ -61,14 +63,17 @@ public class Main {
                     posicoes.removeIf(posicao -> verificaPosicaoSendoAtacada(tabuleiro, posicao, finalJogadorAtual));
                     if(verificaRoqueCurto(tabuleiro, pecaSelecionada, jogadorAtual)){
                         posicoes.add( tabuleiro.getPosicoes().get( tabuleiro.getPosicoes().indexOf( pecaSelecionada.getPosicao() ) + 2) );
-                        System.out.println("adicionei o roque a posicoes");
+                       // System.out.println("adicionei o roque a posicoes");
                     }
                     if(verificaRoqueLongo(tabuleiro, pecaSelecionada, jogadorAtual)){
                         posicoes.add( tabuleiro.getPosicoes().get( tabuleiro.getPosicoes().indexOf( pecaSelecionada.getPosicao() ) - 2) );
                     }
                 }
 
-                posicoes.removeAll(getMovimentosInvalidos(pecaSelecionada, tabuleiro, jogadorAtual));
+                //if(verificaPosicaoSendoAtacada(tabuleiro, jogadorAtual.getRei().getPosicao(),jogadorAtual)){
+                    posicoes.removeAll(getMovimentosInvalidos(pecaSelecionada, tabuleiro, jogadorAtual));
+
+                //}
 //                else {
 //
 //                    //isso aqi n ta mt certo
@@ -83,12 +88,12 @@ public class Main {
 //                    posicoes.removeAll(posicoesARemover);
 //                }
 
-                System.out.println(pecaSelecionada);
-                System.out.println(pecaSelecionada.getPosicao());
+//                System.out.println(pecaSelecionada);
+//                System.out.println(pecaSelecionada.getPosicao());
                 for (Posicao posicao : posicoes) {
-                    System.out.println("posicao");
-                    System.out.println(posicao);
-                    System.out.println(posicao.getPeca());
+//                    System.out.println("posicao");
+//                    System.out.println(posicao);
+//                    System.out.println(posicao.getPeca());
                     posicoesValidas += index + " - " + posicao + " " + (tabuleiro.getPosicoes().indexOf(posicao) + 1) + "\n";//talvez+1
                     index++;
                 }
@@ -157,7 +162,7 @@ public class Main {
 //            }
 
 
-            System.out.println(validarVitoria(j2));
+            //System.out.println(validarVitoria(j2));
 
             if(jogadorAtual == j1){
                 jogadorAtual = j2;
@@ -220,15 +225,14 @@ public class Main {
     }
 
     private static boolean verificaPosicaoSendoAtacada(Tabuleiro tabuleiro, Posicao posicaoAVerificar, Jogador jogadorAtual){
-        boolean testandoPeca = false;
+        boolean testandoPeca = false; //ver caso do peao (7 e 9, mas reto nao)
         if(posicaoAVerificar.getPeca() == null){
             posicaoAVerificar.setPeca(new Peao(jogadorAtual.getCor(), posicaoAVerificar));
             testandoPeca = true;
         }
 
         for(Posicao posicaoTabuleiro : tabuleiro.getPosicoes()){                                                //passa por todas posicoes
-            Peca pecaInimiga = posicaoTabuleiro.getPeca();//?????
-
+            Peca pecaInimiga = posicaoTabuleiro.getPeca();
 
             if(pecaInimiga!=null && !(pecaInimiga.getCor().equals(jogadorAtual.getCor()) )) {
 
@@ -294,20 +298,33 @@ public class Main {
     }
 
     public static ArrayList<Posicao> getMovimentosInvalidos(Peca peca, Tabuleiro tabuleiro, Jogador jogadorAtual){
+       // System.out.println("passei ");
         ArrayList<Posicao> movimentos = peca.possiveisMovimentos(tabuleiro);
         int posicaoOriginal = tabuleiro.getPosicoes().indexOf(peca.getPosicao());
-        Peca pecaGuardada = null;
-
+        Peca pecaCapturada;
+//        System.out.println("peca1");
+//        System.out.println(peca);
+//        System.out.println(peca.getPosicao());
         ArrayList<Posicao> possicoesARemover = new ArrayList<>();
         for(Posicao posicao : movimentos){
-            pecaGuardada = posicao.getPeca();
-            peca.mover(tabuleiro, posicao);
+            //pecaGuardada = posicao.getPeca();
+            //System.out.println("simulando");
+            System.out.println("movendo 1");
+            pecaCapturada = peca.mover(tabuleiro, posicao);
+
             if(verificaPosicaoSendoAtacada(tabuleiro, jogadorAtual.getRei().getPosicao(), jogadorAtual)){
                 possicoesARemover.add(posicao);
             }
-            peca.mover(tabuleiro, tabuleiro.getPosicoes().get(posicaoOriginal));
+            System.out.println("movendo 2");
+            peca.desmover(tabuleiro, tabuleiro.getPosicoes().get(posicaoOriginal), pecaCapturada);
 
-            posicao.setPeca(pecaGuardada);
+            //System.out.println("fim simulando");
+           // System.out.println("teste mover 2");
+
+           // posicao.setPeca(pecaGuardada);
+//            System.out.println("peca3");
+//            System.out.println(peca);
+//            System.out.println(peca.getPosicao());
         }
         return possicoesARemover;
     }

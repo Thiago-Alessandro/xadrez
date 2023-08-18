@@ -1,3 +1,4 @@
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class Tabuleiro {
@@ -51,6 +52,15 @@ public class Tabuleiro {
             if(i == 60){
                 posicoes.get(i).setPeca(new Rei("Branco", posicoes.get(i)));
             }
+
+//            if(i == 28){
+//                posicoes.get(i).setPeca(new Peao("Branco", posicoes.get(i)));
+//                ((Peao)posicoes.get(i).getPeca()).setPrimeiroMov(false);
+//            }
+//            if(i == 27){
+//                posicoes.get(i).setPeca(new Peao("Preto", posicoes.get(i)));
+//                ((Peao)posicoes.get(i).getPeca()).setPrimeiroMov(false);
+//            }
         }
 
     }
@@ -67,7 +77,11 @@ public class Tabuleiro {
 
     @Override
     public String toString() {
+        String tabuleiro = "";
+        for(Posicao posicao : posicoes){
+            tabuleiro +=  "" + posicao + posicoes.indexOf(posicao) + "  ||  ";
+        }
         return "Tabuleiro " +
-                "posicoes=" + posicoes;
+                "posicoes=" + tabuleiro;
     }
 }
