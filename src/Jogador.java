@@ -2,15 +2,12 @@ import java.util.ArrayList;
 
 public class Jogador {
 
-    private String nome;
-    private String senha;
+    private final String nome;
     private String cor;
-    private double pontos;
     private ArrayList<Peca> pecas;
 
-    public Jogador(String nome, String senha){
+    public Jogador(String nome){
         this.nome = nome;
-        this.senha = senha;
         this.pecas = new ArrayList<>();
 
     }
@@ -25,17 +22,6 @@ public class Jogador {
             adversario.pecas.remove(pecaAdversaria);
         }
     }
-
-
-
-    public boolean proporEmpate(Jogador jogador){
-        return true;
-    }
-
-    public void desistir(){
-
-    }
-
 
     public void setCor(String cor, Tabuleiro tabuleiro) {
         this.cor = cor;

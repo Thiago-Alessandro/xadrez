@@ -8,8 +8,6 @@ public class Peao  extends Peca{
         super("P", cor, posicao);
     }
 
-    private boolean segundoMov = false;
-
     @Override
     public ArrayList<Posicao> possiveisMovimentos(Tabuleiro tabuleiro) {
        // System.out.println("vendo possiveis movs do peao");
@@ -23,9 +21,6 @@ public class Peao  extends Peca{
         ArrayList<Posicao> posicoesTabuleiro = tabuleiro.getPosicoes();
 
         if(this.getCor().equals("Preto")) {//se a minha peca for preta
-
-           // System.out.println("peao preto");
-            //System.out.println(posicaoNoTabuleiro);
 
             if (posicoesTabuleiro.get(posicaoNoTabuleiro+8).getPeca()==null){//se a frente estiver nulo
                 possiveisMovimentos.add(posicoesTabuleiro.get(posicaoNoTabuleiro + 8));
@@ -52,30 +47,30 @@ public class Peao  extends Peca{
 
             }
 
+
+
+
+
             //en peassant
             if(posicaoNoTabuleiro >= 32 && posicaoNoTabuleiro <= 39){ //linha do en peassant mudaraaaaa (ta com problema)
 
                 Peca peaoInimigoEsquerda = posicoesTabuleiro.get(posicaoNoTabuleiro + 1).getPeca();
-                Posicao posEnpassantEsquerda = posicoesTabuleiro.get(posicoesTabuleiro.indexOf( posicoesTabuleiro.indexOf( peaoInimigoEsquerda.getPosicao()) + 8));
                 Peca peaoInimigoDireita = posicoesTabuleiro.get(posicaoNoTabuleiro - 1).getPeca();
-                Posicao posEnpassantDireita = posicoesTabuleiro.get(posicoesTabuleiro.indexOf( posicoesTabuleiro.indexOf( peaoInimigoDireita.getPosicao()) + 8));
 
-                if(posicaoNoTabuleiro != 39 && peaoInimigoEsquerda != null &&
-                        peaoInimigoEsquerda.getCor() != this.getCor() )         //verificar com atributo "possivelEnpeassant"
+                if(posicaoNoTabuleiro != 39 && peaoInimigoEsquerda instanceof Peao && !peaoInimigoEsquerda.getCor().equals(this.getCor()))        //verificar com atributo "possivelEnpeassant"
                 {
+                    Posicao posEnpassantEsquerda = posicoesTabuleiro.get(posicoesTabuleiro.indexOf( peaoInimigoEsquerda.getPosicao()) + 8);
                     possiveisMovimentos.add(posEnpassantEsquerda);
 
-                } else if(posicaoNoTabuleiro != 32 && peaoInimigoDireita != null &&
-                        peaoInimigoDireita.getCor() != this.getCor() ){ //verificar com atributo "possivelEnpeassant"
+                }
+                if(posicaoNoTabuleiro != 32 && peaoInimigoDireita instanceof Peao && !peaoInimigoDireita.getCor().equals(this.getCor())){ //verificar com atributo "possivelEnpeassant"
 
+                    Posicao posEnpassantDireita = posicoesTabuleiro.get( posicoesTabuleiro.indexOf( peaoInimigoDireita.getPosicao()) + 8);
                     possiveisMovimentos.add(posEnpassantDireita);
                 }
             }
 
         }else if(this.getCor().equals("Branco")){
-
-           // System.out.println("peao branco");
-           // System.out.println(posicaoNoTabuleiro);
 
             if (posicoesTabuleiro.get(posicaoNoTabuleiro-8).getPeca()==null) {
                 possiveisMovimentos.add(tabuleiro.getPosicoes().get(posicaoNoTabuleiro - 8));
@@ -98,27 +93,23 @@ public class Peao  extends Peca{
                     && !validarExtremidade(posicaoNoTabuleiro + 1)){
 
                 possiveisMovimentos.add(posicoesTabuleiro.get(posicaoNoTabuleiro-7));
-
             }
 
-            //en peassant
+            //en passant
             if(posicaoNoTabuleiro >= 24 && posicaoNoTabuleiro <= 31){ //linha do en peassant
-                //System.out.println("branco linha en passant");
+
                 Peca peaoInimigoEsquerda = tabuleiro.getPosicoes().get(posicaoNoTabuleiro - 1).getPeca();
                 Peca peaoInimigoDireita = tabuleiro.getPosicoes().get(posicaoNoTabuleiro + 1).getPeca();
 
-                if(posicaoNoTabuleiro != 24 && peaoInimigoEsquerda != null &&
-                        peaoInimigoEsquerda.getCor() != this.getCor() )         //verificar com atributo "possivelEnpeassant"
+                if(posicaoNoTabuleiro != 24 && peaoInimigoEsquerda instanceof Peao && !peaoInimigoEsquerda.getCor().equals(this.getCor()))
                 {
-                   // System.out.println("posicoesTabuleiro");System.out.println(tabuleiro);            --------------------------
                     Posicao posEnpassantEsquerda = posicoesTabuleiro.get(posicoesTabuleiro.indexOf(peaoInimigoEsquerda.getPosicao())-8);
-                            //posicoesTabuleiro.get(posicoesTabuleiro.indexOf( posicoesTabuleiro.indexOf( peaoInimigoEsquerda.getPosicao()) - 8 ));
                     possiveisMovimentos.add(posEnpassantEsquerda);
 
-                } else if(posicaoNoTabuleiro != 31 && peaoInimigoDireita != null &&
-                        !peaoInimigoDireita.getCor().equals(this.getCor())){ //verificar com atributo "possivelEnpeassant"
+                }
+                if(posicaoNoTabuleiro != 31 && peaoInimigoDireita instanceof Peao && !peaoInimigoDireita.getCor().equals(this.getCor())){
 
-                    Posicao posEnpassantDireita = posicoesTabuleiro.get(posicoesTabuleiro.indexOf( posicoesTabuleiro.indexOf( peaoInimigoDireita.getPosicao()) - 8 ));
+                    Posicao posEnpassantDireita = posicoesTabuleiro.get(posicoesTabuleiro.indexOf( peaoInimigoDireita.getPosicao()) - 8 );
                     possiveisMovimentos.add(posEnpassantDireita);
                 }
             }
@@ -127,20 +118,8 @@ public class Peao  extends Peca{
         return possiveisMovimentos;
     }
 
-    public boolean isPrimeiroMov() {
-        return primeiroMov;
-    }
-
     public void setPrimeiroMov(boolean primeiroMov) {
         this.primeiroMov = primeiroMov;
-    }
-
-    public boolean isSegundoMov() {
-        return segundoMov;
-    }
-
-    public void setSegundoMov(boolean segundoMov) {
-        this.segundoMov = segundoMov;
     }
 
     @Override
